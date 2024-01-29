@@ -1,0 +1,65 @@
+body {
+  background-color: #F5F5DC75;
+  font-family: Helvetica;
+  background: url(https://img.freepik.com/free-photo/beige-abstract-wallpaper-background-image_53876-102527.jpg?w=1060&t=st=1704488072~exp=1704488672~hmac=a5af5059378ea9bb76e38eebff4d632d4b911412101f3e9705cfd463a8bc9ac6);
+  background-size: cover;
+}
+
+header {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+section>header {
+  padding: 20px auto;
+}
+
+
+#navbar {
+  width: 200px;
+  height: 100%;
+  position: fixed;
+  top: 20px;
+  left: 0px;
+  padding: 0 20px;
+  border-right: 3px solid lightgrey;
+}
+
+#sect {
+  margin-left: 250px;
+  position: absolute;
+  top: 20px;
+  padding: 0 20px;
+  width: calc(100% - 290px);
+}
+
+.nav-link {
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: black;
+}
+
+.links {
+  font-family: Calibri;
+  font-weight: 500;
+  padding: 5px 0;
+  text-align: left;
+  margin: 10px;
+}
+
+.links:first-of-type {
+  padding-top: 40px;
+}
+
+@media (max-width: 768px) {
+  body {
+    background: url(https://artincontext.org/wp-content/uploads/2022/11/dark-azure-blue.jpg);
+    color: white;
+    background-size: cover;
+  }
+  
+  .nav-link {
+    color: white;
+  }
+}

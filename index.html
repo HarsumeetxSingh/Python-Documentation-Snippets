@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Technical Documentation - Python Library</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="main-doc">
+    <nav id="navbar">
+      <header>Python Library Documentation</header>
+      <p class="links"><a href="#Introduction" class="nav-link">Introduction</a></p>
+        <p class="links"><a href="#Notes_on_Availability" class="nav-link">Notes on Availability</a></p>
+        <p class="links"><a href="#WebAssembly_Platforms" class="nav-link">WebAssembly Platforms</a></p>
+        <p class="links"><a href="#Some_Built-in_Functions" class="nav-link">Some Built-in Functions</a></p>
+        <p class="links"><a href="#Some_Built-in_Constants" class="nav-link">Some Built-in Constants</a></p>
+    </nav>
+    <div id="sect">
+      <section class="main-section" id="Introduction">
+        <header>Introduction</header>
+        <p>The “Python library” contains several different kinds of components.</p>
+        <p>It contains data types that would normally be considered part of the “core” of a language, such as numbers and lists. For these types, the Python language core defines the form of literals and places some constraints on their semantics, but does not fully define the semantics. (On the other hand, the language core does define syntactic properties like the spelling and priorities of operators.)</p>
+        <p>The library also contains built-in functions and exceptions — objects that can be used by all Python code without the need of an <code>import</code> statement.</p>
+        <p>Some of these are defined by the core language, but many are not essential for the core semantics and are only described here.</p>
+        <p>The bulk of the <code>library</code>, however, consists of a collection of modules. There are many ways to dissect this collection. Some modules are written in C and built in to the Python interpreter; others are written in Python and imported in source form. </p>
+        <p>Some modules provide interfaces that are highly specific to Python, like printing a stack trace; some provide interfaces that are specific to particular operating systems, such as access to specific hardware; others provide interfaces that are specific to a particular application <code>domain</code>, like the World Wide Web.</p>
+        <p>Some modules are available in all versions and ports of Python; others are only available when the underlying system supports or requires them; yet others are available only when a particular configuration option was chosen at the time when Python was compiled and installed.</p>
+        <p>This manual is organized “from the inside out:” it first describes the <code>built-in functions</code>, data types and exceptions, and finally the modules, grouped in chapters of related modules</p>
+        <p>This means that if you start reading this manual from the start, and skip to the next chapter when you get bored, you will get a reasonable overview of the available modules and application areas that are supported by the Python <code>library</code></p>
+        <p>Let the show begin!</p>
+      </section>
+
+      <section class="main-section" id="Notes_on_Availability">
+        <header>Notes on Availability</header>
+        <ul>
+          <li><p>An “Availability: Unix” note means that this function is commonly found on Unix systems. It does not make any claims about its existence on a specific operating system.</p></li>
+          <li><p>If not separately noted, all functions that claim “Availability: Unix” are supported on macOS, which builds on a Unix core.</p></li>
+          <li><p>If an availability note contains both a minimum Kernel version and a minimum libc version, then both conditions must hold. For example a feature with note Availability: Linux >= 3.17 with glibc >= 2.27 requires both Linux 3.17 or newer and glibc 2.27 or newer.</p></li>
+        </ul>
+      </section>
+
+      <section class="main-section" id="WebAssembly_Platforms">
+        <header>WebAssembly Platforms</header>
+        <p>The WebAssembly platforms <code>wasm32-emscripten</code> (Emscripten) and <code>wasm32-wasi</code> (WASI) provide a subset of POSIX APIs. WebAssembly runtimes and browsers are sandboxed and have limited access to the host and external resources. Any Python standard library module that uses processes, threading, networking, signals, or other forms of inter-process communication (IPC), is either not available or may not work as on other Unix-like systems. File I/O, file system, and Unix permission-related functions are restricted, too. Emscripten does not permit blocking I/O. Other blocking operations like <code>sleep()</code> block the browser event loop.</p>
+        <p>The properties and behavior of Python on WebAssembly platforms depend on the Emscripten-SDK or WASI-SDK version, WASM runtimes (browser, NodeJS, wasmtime), and Python build time flags. WebAssembly, Emscripten, and WASI are evolving standards; some features like networking may be supported in the future.</p>
+        <p>For Python in the browser, users should consider Pyodide or PyScript. PyScript is built on top of Pyodide, which itself is built on top of CPython and Emscripten. Pyodide provides access to browsers’ JavaScript and DOM APIs as well as limited networking capabilities with JavaScript’s <code>XMLHttpRequest</code> and <code>Fetch</code> APIs.</p>
+        <ul>
+          <li>Process-related APIs are not available or always fail with an error. That includes APIs that spawn new processes (fork(), execve()), wait for processes (waitpid()), send signals (kill()), or otherwise interact with processes. The <code>subprocess</code> is importable but does not work.</li>
+          <li>The <code>socket</code> module is available, but is limited and behaves differently from other platforms. On Emscripten, sockets are always non-blocking and require additional JavaScript code and helpers on the server to proxy TCP through WebSockets; see Emscripten Networking for more information. WASI snapshot preview 1 only permits sockets from an existing file descriptor.</li>
+          <li>Some functions are stubs that either don’t do anything and always return hardcoded values. Functions related to file descriptors, file permissions, file ownership, and links are limited and don’t support some operations. For example, WASI does not permit symlinks with absolute file names.</li>
+        </ul>
+      </section>
+
+      <section class="main-section" id="Some_Built-in_Functions">
+        <header>Some Built-in Functions</header>
+        <ul>
+          <p><li>abs(<i>x</i>)<br>
+Return the absolute value of a number. The argument may be an integer, a floating point number, or an object implementing <code>__abs__()</code>. If the argument is a complex number, its magnitude is returned.</li></p>
+        <p><li>aiter(<i>async_iterable</i>)<br>
+Return an asynchronous iterator for an asynchronous iterable. Equivalent to calling <code>x.__aiter__()</code>.
+Note: Unlike iter(), aiter() has no 2-argument variant./li></p>
+        <p><li>ascii(<i>object</i>)<br>
+As <code>repr()</code>, return a string containing a printable representation of an object, but escape the non-ASCII characters in the string returned by <code>repr()</code> using \x, \u, or \U escapes. This generates a string similar to that returned by <code>repr()</code> in Python 2.</li></p>
+        <p><li>callable(<i>object</i>)<br>
+Return True if the object argument appears callable, False if not. If this returns True, it is still possible that a call fails, but if it is False, calling object will never succeed. Note that classes are callable (calling a class returns a new instance); instances are callable if their class has <code>a __call__()</code> method.</li></p>
+        <p><li>chr(<i>i</i>)<br>
+          Return the string representing a character whose Unicode code point is the integer i. For example, <code>chr(97)</code> returns the string 'a', while <code>chr(8364)</code> returns the string '€'. This is the inverse of ord().
+The valid range for the argument is from 0 through 1,114,111 (0x10FFFF in base 16). ValueError will be raised if i is outside that range.</p></li>
+      </section>
+
+      <section class="main-section" id="Some_Built-in_Constants">
+        <header>Some Built-in Constants</header>
+        
+        <code></code>
+        <code></code>
+        <ul>
+          <p><li>False<br>
+The false value of the bool type. Assignments to False are illegal and raise a SyntaxError.</li></p>
+          <p><li>True<br>
+The true value of the bool type. Assignments to True are illegal and raise a SyntaxError.</li></p>
+          <p><li>None<br>
+An object frequently used to represent the absence of a value, as when default arguments are not passed to a function. Assignments to None are illegal and raise a SyntaxError. None is the sole instance of the NoneType type.</li></p>
+          <p><li>__debug__<br>
+This constant is true if Python was not started with an -O option. See also the assert statement.</li></p>
+          <p><li>Ellipsis<br>
+The same as the ellipsis literal “...”. Special value used mostly in conjunction with extended slicing syntax for user-defined container data types. Ellipsis is the sole instance of the types.EllipsisType type.</li></p>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
